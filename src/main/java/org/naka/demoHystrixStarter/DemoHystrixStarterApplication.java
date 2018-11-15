@@ -34,13 +34,12 @@ public class DemoHystrixStarterApplication {
 	}
 	
 	@GetMapping("/testeHystrix/{city}")
-	// wait 2 seconds before call fallback method. The default time is 9s
 	@HystrixCommand(fallbackMethod="fallbackWeather", commandProperties= {@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000")})
 	public Object testeHystrix(@PathVariable("city") String city) {
 		return restTemplate.getForEntity(url, String.class, city, apiKey);
 	}
 	
-	@SuppressWarnings({ "unused" })
+	@SuppressWarnings({"unused"})
 	private Object fallbackWeather(String city) {
 		return new ResponseEntity<Object>(Status.builder().status("fallback method").build(),HttpStatus.I_AM_A_TEAPOT);
 	}
